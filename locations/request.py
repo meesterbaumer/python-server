@@ -46,6 +46,12 @@ def create_location(location):
     # Return the dictionary with `id` property added
     return location
 
+def update_location(id, new_location):
+    for index, location in enumerate(LOCATIONS):
+        if location["id"] == id:
+            LOCATIONS[index] = new_location
+            break
+
 def delete_location(id):
     location_index = -1
 
