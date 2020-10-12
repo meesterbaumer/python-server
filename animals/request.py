@@ -2,34 +2,6 @@ import sqlite3
 import json
 from models import Animal
 
-ANIMALS = [
-    {
-      "id": 1,
-      "name": "Fern",
-      "breed": "Mutt",
-      "status": "Admitted",
-      "customerId": 4,
-      "locationId": 2
-    },
-    {
-      "id": 2,
-      "name": "Redd",
-      "breed": "Red Tick Coonhound",
-      "status": "Admitted",
-      "customerId": 5,
-      "locationId": 1
-    },
-    {
-      "id": 3,
-      "name": "Maddie",
-      "breed": "Cat",
-      "status": "Not Admitted",
-      "customerId": 4,
-      "locationId": 2
-    }
-]
-
-
 def get_all_animals():
     # Open a connection to the database
     with sqlite3.connect("./kennel.db") as conn:
@@ -96,9 +68,9 @@ def get_single_animal(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        animal = Animal(data['name'], data['breed'], data['status'],
-                        data['location_id'], data['customer_id'],
-                        data['id'])
+        animal = Animal(data['id'], data['name'], data['breed'],
+                        data['status'], data['customer_id'],
+                        data['location_id'])
 
         return json.dumps(animal.__dict__)
 
