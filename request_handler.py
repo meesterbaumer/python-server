@@ -1,10 +1,10 @@
 from employees.request import update_employee
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal, get_animal_by_location
+from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal, get_animal_by_location, get_animal_by_status
 from locations import get_all_locations, get_single_location, create_location, delete_location, update_location
 from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer, get_customer_by_email
-from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee
+from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee, get_employee_by_location
 
 
 # Here's a class. It inherits from another class.
@@ -30,7 +30,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         # items in it, which means the request was for
         # `/animals` or `/animals/2`
         if len(parsed) == 2:
-            ( resource, id ) = parsed
+            (resource, id) = parsed
             if resource == "animals":
                 if id is not None:
                     response = f"{get_single_animal(id)}"
@@ -42,11 +42,15 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_customers()}"
         elif len(parsed) == 3:
-            ( resource, key, value ) = parsed
+            (resource, key, value) = parsed
             if key == "email" and resource == "customers":
                 response = get_customer_by_email(value)
             if key == "location_id" and resource == "animals":
                 response = get_animal_by_location(value)
+            if key == "location_id" and resource == "employees":
+                response = get_employee_by_location(value)
+            if key == "status" and resource == "animals":
+                response = get_animal_by_status(value)
         self.wfile.write(response.encode())
 
     def parse_url(self, path):
@@ -64,7 +68,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             key = pair[0]
             value = pair[1]
 
-            return ( resource, key, value )
+            return (resource, key, value)
         else:
             id = None
 
@@ -106,10 +110,10 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # Encode the new animal and send in response
         self.wfile.write(f"{new_thing}".encode())
-      
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any PUT request.
+
     def do_PUT(self):
         self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
@@ -159,6 +163,7 @@ def main():
     host = ''
     port = 8088
     HTTPServer((host, port), HandleRequests).serve_forever()
+
 
 if __name__ == "__main__":
     main()
