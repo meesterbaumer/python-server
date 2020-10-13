@@ -111,3 +111,8 @@ SELECT e.id,
   e.name
 FROM employee e
 WHERE e.id = 1;
+
+SELECT l.id,
+  l.name
+FROM location l
+WHERE l.id = 1
