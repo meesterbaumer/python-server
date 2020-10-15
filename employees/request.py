@@ -37,7 +37,7 @@ EMPLOYEES = [
 
 
 def get_all_employees():
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("kennel.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -62,7 +62,7 @@ def get_all_employees():
 
 
 def get_single_employee(id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("kennel.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -82,7 +82,7 @@ def get_single_employee(id):
 
 def get_employee_by_location(location):
 
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("kennel.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 

@@ -99,19 +99,16 @@ SELECT a.id,
   a.location_id
 FROM animal a
 WHERE a.id = 2;
-
 --Get only single customer
 SELECT c.id,
   c.name,
   c.email
 FROM customer c
 WHERE c.id = 4;
-
 SELECT e.id,
   e.name
 FROM employee e
 WHERE e.id = 1;
-
 SELECT l.id,
   l.name
 FROM location l
