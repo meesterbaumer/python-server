@@ -1,7 +1,6 @@
 import sqlite3
 import json
-from models import Animal
-
+from models import Animal, Location, Customer
 
 def get_all_animals():
     # Open a connection to the database
@@ -19,8 +18,12 @@ def get_all_animals():
             a.breed,
             a.status,
             a.location_id,
-            a.customer_id
+            a.customer_id,
+            c.name customer_name,
+            l.name location_name
         FROM animal a
+        Join Customer c ON c.id = a.customer_id
+        Join Location l ON l.id = a.location_id
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -62,8 +65,12 @@ def get_single_animal(id):
             a.breed,
             a.status,
             a.location_id,
-            a.customer_id
+            a.customer_id,
+            c.name customer_name,
+            l.name location_name
         FROM animal a
+        Join Customer c ON c.id = a.customer_id
+        Join Location l ON l.id = a.location_id
         WHERE a.id = ?
         """, (id, ))
 
@@ -74,6 +81,12 @@ def get_single_animal(id):
         animal = Animal(data['id'], data['name'], data['breed'],
                         data['status'], data['location_id'],
                         data['customer_id'])
+
+        location = Location("", data['location_name'], "")
+        animal.location = location.__dict__
+
+        customer = Customer("", data['customer_name'], "")
+        animal.customer = customer.__dict__
 
         return json.dumps(animal.__dict__)
 

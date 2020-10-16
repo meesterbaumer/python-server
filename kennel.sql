@@ -112,4 +112,18 @@ WHERE e.id = 1;
 SELECT l.id,
   l.name
 FROM location l
-WHERE l.id = 1
+WHERE l.id = 1;
+
+SELECT
+            a.id,
+            a.name,
+            a.breed,
+            a.status,
+            a.location_id,
+            a.customer_id,
+            c.name customer_name,
+            l.name location_name
+        FROM animal a
+        Join Customer c ON c.id = a.customer_id
+        Join Location l ON l.id = a.location_id
+        WHERE a.id = 1
