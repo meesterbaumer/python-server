@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from sqlite3.dbapi2 import Cursor
 from models import Animal, Location, Customer
 
 
@@ -150,21 +151,20 @@ def get_animal_by_status(status):
     return json.dumps(animals)
 
 
-def create_animal(animal):
-    # Get the id value of the last animal in the list
-    max_id = ANIMALS[-1]["id"]
+def create_animal(new_animal):
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    # Add 1 to whatever that number is
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Animal
+            ( name, breed, status, location_id, customer_id )
+        VALUES
+            ( ?, ?, ?, ?, ?);
+        """, (new_animal['name'], new_animal['breed'], new_animal['status'], new_animal['locationId'], new_animal['customerId'], ))
 
-    # Add an `id` property to the animal dictionary
-    animal["id"] = new_id
-
-    # Add the animal dictionary to the list
-    ANIMALS.append(animal)
-
-    # Return the dictionary with `id` property added
-    return animal
+        id = db_cursor.lastrowid
+        new_animal['id'] = id
+    return json.dumps(new_animal)
 
 
 def update_animal(id, new_animal):
