@@ -126,4 +126,4 @@ SELECT
         FROM animal a
         Join Customer c ON c.id = a.customer_id
         Join Location l ON l.id = a.location_id
-        WHERE a.id = 1
+        WHERE a.id = 1;

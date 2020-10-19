@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models import Animal, Location, Customer
 
+
 def get_all_animals():
     # Open a connection to the database
     with sqlite3.connect("./kennel.db") as conn:
@@ -119,6 +120,7 @@ def get_animal_by_location(location):
 
     return json.dumps(animals)
 
+
 def get_animal_by_status(status):
 
     with sqlite3.connect("./kennel.db") as conn:
@@ -147,6 +149,7 @@ def get_animal_by_status(status):
 
     return json.dumps(animals)
 
+
 def create_animal(animal):
     # Get the id value of the last animal in the list
     max_id = ANIMALS[-1]["id"]
@@ -165,17 +168,30 @@ def create_animal(animal):
 
 
 def update_animal(id, new_animal):
-    # Iterate the ANIMALS list, but use enumerate() so that
-    # you can access the index value of each item.
-    for index, animal in enumerate(ANIMALS):
-        if animal["id"] == id:
-            # Found the animal. Update the value.
-            ANIMALS[index] = new_animal
-            break
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Animal
+            SET
+                name = ?,
+                breed = ?,
+                status = ?,
+                location_id = ?,
+                customer_id = ?
+        WHERE id = ?
+        """, (new_animal['name'], new_animal['breed'], new_animal['status'], new_animal['locationId'], new_animal['customerId'], id, ))
+
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        return False
+    else:
+        return True
 
 
 def delete_animal(id):
-    with sqlite3.connect("kennel.db") as conn:
+    with sqlite3.connect("./kennel.db") as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
